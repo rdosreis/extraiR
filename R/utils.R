@@ -3,7 +3,7 @@
 # 
 # httr::set_config(config(ssl_verifypeer = 0L))
 
-# cria_estrutura <- function(set.wd = "C:/Users/00119858.AD/Documents", acronym, ...){
+# cria_estrutura <- function(set.wd = "C:/", acronym, ...){
 #   mainDir <- Sys.Date()
 #   subDir <- toupper(acronym)
 #   direxists <- dir.exists(paths = file.path(set.wd, mainDir))
@@ -23,17 +23,17 @@
 #'
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
 #'
 #' @example
 #' # Not run!
 #' # antc_versoes <- extrai_versao(acronym = "ANTC",
-#' #                                token = "40d6065c-ba9e-4a46-abaf-2e66b58d3501")
+#' #                                token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
 #'
 extrai_versao <- function(
-                          url = "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity",
+                          url = "https://api-otus.localhost/otus-rest/v01/data-extraction/activity",
                           acronym, token, ...) {
   url <- paste(url, acronym, "versions", sep = "/")
   get <- GET(
@@ -61,7 +61,7 @@ extrai_versao <- function(
 #'
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param version O número da versão da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
@@ -70,10 +70,10 @@ extrai_versao <- function(
 #' # Not run!
 #' # antc_v1 <- extrai_atividade(acronym = "ANTC",
 #' #                                version = 1,
-#' #                                token = "40d6065c-ba9e-4a46-abaf-2e66b58d3501")
+#' #                                token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
 #'
 extrai_atividade <- function(
-                             url = "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity",
+                             url = "https://api-otus.localhost/otus-rest/v01/data-extraction/activity",
                              acronym, version, token, ...) {
   url <- paste(url, acronym, version, sep = "/")
   get <- GET(
@@ -100,14 +100,14 @@ extrai_atividade <- function(
 #'
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
 #'
 #' @example
 #' # Not run!
 #' # antc_lista_dfs <- extrai_atividade_lista(acronym = "ANTC",
-#' #                                          token = "40d6065c-ba9e-4a46-abaf-2e66b58d3501")
+#' #                                          token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
 #'
 extrai_atividade_lista <- function(
                                    url = "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity",
