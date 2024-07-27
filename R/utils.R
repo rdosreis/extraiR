@@ -111,7 +111,7 @@ extrai_atividade <- function(
 #' @description
 #' A função extrai_atividade_lista extrai todas as versões
 #'   correspondentes de uma atividade
-#'   através do api do Otus ELSA, retornando uma lista de data frames.
+#'   através do api do Otus ELSA, retornando uma lista de dataframes.
 #'
 #' @param project O nome do projeto no Otus.
 #' @param url O nome da url de extração de dados para a atividade desejada.
@@ -119,6 +119,7 @@ extrai_atividade <- function(
 #'   "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
+#' @param docall logic se o usuário deseja um dataframe combinado da lista
 #'
 #' @example
 #' # Not run!
@@ -128,7 +129,7 @@ extrai_atividade <- function(
 extrai_atividade_lista <- function(
     project = "elsa",
     url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
-    acronym, token, ...) {
+    acronym, token, docall = TRUE, ...) {
   atividade_versoes <- extrai_versao(acronym = acronym, token = token)
   extrai_atividade_aux <- function(x) {
     extrai_atividade(
@@ -138,8 +139,9 @@ extrai_atividade_lista <- function(
     )
   }
   atividade_lista_dfs <- lapply(X = atividade_versoes$versoes, FUN = extrai_atividade_aux)
-  atividade_lista_dfs
+  if (docall){
+    do.call(what = "rbind", args = atividade_lista_dfs)
+  }else{
+    atividade_lista_dfs
+  }
 }
-
-
-

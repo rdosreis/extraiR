@@ -9,6 +9,7 @@ extrai_atividade_lista(
   url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
   acronym,
   token,
+  docall = TRUE,
   ...
 )
 }
@@ -22,9 +23,11 @@ A url default utilizada é
 \item{acronym}{O acrônimo da atividade para a qual se deseja extrair os dados.}
 
 \item{token}{character o token do usuário.}
+
+\item{docall}{logic se o usuário deseja um dataframe combinado da lista}
 }
 \description{
 A função extrai_atividade_lista extrai todas as versões
   correspondentes de uma atividade
-  através do api do Otus ELSA, retornando uma lista de data frames.
+  através do api do Otus ELSA, retornando uma lista de dataframes.
 }
