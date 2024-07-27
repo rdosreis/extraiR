@@ -1,6 +1,6 @@
-# library(httr)
-# library(readr)
-# 
+library(httr)
+library(readr)
+
 # httr::set_config(config(ssl_verifypeer = 0L))
 
 # cria_estrutura <- function(set.wd = "C:/", acronym, ...){
@@ -21,24 +21,30 @@
 #'   e os números correspondentes das versões de uma atividade
 #'   através do api do Otus ELSA, retornando uma lista.
 #'
+#' @param project O nome do projeto no Otus.
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
 #'
 #' @example
 #' # Not run!
 #' # antc_versoes <- extrai_versao(acronym = "ANTC",
-#' #                                token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
+#' #                                token = "")
 #'
 extrai_versao <- function(
-                          url = "https://api-otus.localhost/otus-rest/v01/data-extraction/activity",
+                          project = "elsa",
+                          url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
                           acronym, token, ...) {
+  httr::set_config(httr::config(ssl_verifypeer = 0L))
   url <- paste(url, acronym, "versions", sep = "/")
   get <- GET(
     url = url,
-    config = add_headers(Authorization = token)
+    config = list(
+      content_type = "text/csv;charset=UTF-8"
+      ),
+      add_headers(Authorization = token, Origin = project, Connection = "keep-alive")
   )
   retrieve_content <- content(
     x = get, as = "text",
@@ -59,9 +65,10 @@ extrai_versao <- function(
 #' A função extrai_atividade extrai uma versão de um atividade
 #'   através do api do Otus ELSA, retornando um data frame/tibble.
 #'
+#' @param project O nome do projeto no Otus.
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param version O número da versão da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
@@ -70,25 +77,33 @@ extrai_versao <- function(
 #' # Not run!
 #' # antc_v1 <- extrai_atividade(acronym = "ANTC",
 #' #                                version = 1,
-#' #                                token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
+#' #                                token = "")
 #'
 extrai_atividade <- function(
-                             url = "https://api-otus.localhost/otus-rest/v01/data-extraction/activity",
-                             acronym, version, token, ...) {
+    project = "elsa",
+    url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
+    acronym, version, token, ...) {
+  httr::set_config(httr::config(ssl_verifypeer = 0L))
   url <- paste(url, acronym, version, sep = "/")
   get <- GET(
     url = url,
-    config = add_headers(Authorization = token)
+    config = list(
+      content_type = "text/csv;charset=UTF-8"
+    ),
+    add_headers(Authorization = token, Origin = project, Connection = "keep-alive")
   )
-  retrieve_content <- content(
-    x = get, as = "text",
-    encoding = "UTF-8"
-  )
-  atividade_df <- read_delim(
-    file = retrieve_content, delim = ";",
-    escape_double = FALSE, col_names = TRUE
-  )
-  atividade_df
+  if (get$status_code != 500){
+    retrieve_content <- content(
+      x = get, as = "text",
+      encoding = "UTF-8"
+    )
+    atividade_df <- read_delim(
+      file = retrieve_content, delim = ";",
+      escape_double = FALSE, col_names = TRUE,
+      show_col_types = FALSE
+    )
+    atividade_df
+  }
 }
 
 #' Extrai as versões de uma atividade
@@ -98,20 +113,22 @@ extrai_atividade <- function(
 #'   correspondentes de uma atividade
 #'   através do api do Otus ELSA, retornando uma lista de data frames.
 #'
+#' @param project O nome do projeto no Otus.
 #' @param url O nome da url de extração de dados para a atividade desejada.
 #'   A url default utilizada é
-#'   "https://api-otus.localhost/otus-rest/v01/data-extraction/activity"
+#'   "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity"
 #' @param acronym O acrônimo da atividade para a qual se deseja extrair os dados.
 #' @param token character o token do usuário.
 #'
 #' @example
 #' # Not run!
 #' # antc_lista_dfs <- extrai_atividade_lista(acronym = "ANTC",
-#' #                                          token = "43j3ae12-010f-49f9-bd62-0268d7600ef7")
+#' #                                          token = "")
 #'
 extrai_atividade_lista <- function(
-                                   url = "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity",
-                                   acronym, token, ...) {
+    project = "elsa",
+    url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
+    acronym, token, ...) {
   atividade_versoes <- extrai_versao(acronym = acronym, token = token)
   extrai_atividade_aux <- function(x) {
     extrai_atividade(

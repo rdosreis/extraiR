@@ -4,14 +4,20 @@
 \alias{extrai_versao}
 \title{Extrai número de versões}
 \usage{
-
-  extrai_versao(url = "https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity",
-  acronym, token, ...)
+extrai_versao(
+  project = "elsa",
+  url = "https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity",
+  acronym,
+  token,
+  ...
+)
 }
 \arguments{
+\item{project}{O nome do projeto no Otus.}
+
 \item{url}{O nome da url de extração de dados para a atividade desejada.
 A url default utilizada é
-"https://api-otus.elsa.ufrgs.br/otus-rest/v01/data-extraction/activity"}
+"https://api-otus.elsa.ufrgs.br/enterprises/data-extraction/activity"}
 
 \item{acronym}{O acrônimo da atividade para a qual se deseja extrair os dados.}
 
